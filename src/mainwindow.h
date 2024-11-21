@@ -2,6 +2,7 @@
 
 #include <qcheckbox.h>
 #include <qgridlayout.h>
+#include <qobjectdefs.h>
 #include <qpushbutton.h>
 #include <qtextbrowser.h>
 
@@ -36,6 +37,8 @@ class MainWindow : public QMainWindow {
     void onStartButtonPressed();
     void onStartTimerButtonPressed();
 
+    void onTimerTimeout();
+
    private:
     static QString currentTime();
 
@@ -43,7 +46,7 @@ class MainWindow : public QMainWindow {
     QString getFileMask() const;
     QString getInputFile() const;
     QString getOutputFile() const;
-    double getTimerDuration() const;
+    int getTimerDuration() const;
     QByteArray getXORVariableValue() const;
     OverwriteOptionsInput::Option overwriteOption() const;
 
@@ -71,4 +74,6 @@ class MainWindow : public QMainWindow {
     QPushButton *startTimerButton_;
 
     QTextBrowser *logWidget_;
+
+    QTimer *timer_;
 };

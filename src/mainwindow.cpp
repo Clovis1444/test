@@ -6,6 +6,7 @@
 #include <qnamespace.h>
 #include <qpushbutton.h>
 #include <qspinbox.h>
+#include <qtimer.h>
 
 #include "./ui_mainwindow.h"
 #include "fileMaskInput.h"
@@ -31,7 +32,8 @@ MainWindow::MainWindow(QWidget* parent)
       saveFileInput_{new SaveFileInput{this}},
       startButton_{new QPushButton{"Start"}},
       startTimerButton_{new QPushButton{"Start timer"}},
-      logWidget_{new QTextBrowser{this}} {
+      logWidget_{new QTextBrowser{this}},
+      timer_{new QTimer{this}} {
     ui_->setupUi(this);
 
     // Layout
@@ -57,6 +59,7 @@ MainWindow::MainWindow(QWidget* parent)
     // Widgets setup
     startButton_->setFixedHeight(Settings::kDefaultButtonSize.height());
     startTimerButton_->setFixedHeight(Settings::kDefaultButtonSize.height());
+    startTimerButton_->setStyleSheet(Settings::kStartTimerButtonStyleSheet);
 
     logWidget_->setFixedWidth(fileInput_->width() + saveFileInput_->width() +
                               layout_->spacing());
@@ -72,6 +75,9 @@ MainWindow::MainWindow(QWidget* parent)
                      &MainWindow::onStartButtonPressed);
     QObject::connect(startTimerButton_, &QPushButton::pressed, this,
                      &MainWindow::onStartTimerButtonPressed);
+
+    QObject::connect(timer_, &QTimer::timeout, this,
+                     &MainWindow::onTimerTimeout);
 }
 
 MainWindow::~MainWindow() { delete ui_; }
@@ -114,7 +120,61 @@ void MainWindow::onStartButtonPressed() {
 
     deleteInputFile();
 }
-void MainWindow::onStartTimerButtonPressed() {}
+void MainWindow::onStartTimerButtonPressed() {
+    // If timer is on
+    if (timer_->isActive()) {
+        startTimerButton_->setText("Start timer");
+        startTimerButton_->setStyleSheet(Settings::kStartTimerButtonStyleSheet);
+
+        timer_->stop();
+
+        logWidget_->insertPlainText(currentTime());
+        logWidget_->insertPlainText(QString{" Stop timer"});
+
+        logWidget_->insertPlainText("\n");
+    }
+    // If timer is off
+    else {
+        if (getTimerDuration() == 0) {
+            logWidget_->insertPlainText(currentTime());
+            logWidget_->insertPlainText(
+                " Failed to start timer: timer duration must be set");
+
+            logWidget_->insertPlainText("\n");
+
+            return;
+        }
+
+        startTimerButton_->setText(
+            QString{"Stop timer(%1 seconds)"}.arg(getTimerDuration()));
+        startTimerButton_->setStyleSheet(Settings::kStopTimerButtonStyleSheet);
+
+        timer_->start(getTimerDuration() * 1000);
+
+        logWidget_->insertPlainText(currentTime());
+        logWidget_->insertPlainText(
+            QString{" Start timer with %1 seconds interval"}.arg(
+                getTimerDuration()));
+
+        logWidget_->insertPlainText("\n");
+    }
+}
+
+void MainWindow::onTimerTimeout() {
+    QByteArray file_content{};
+
+    if (!getFileContent(file_content)) {
+        return;
+    };
+
+    doWork(file_content);
+
+    if (!saveFile(file_content)) {
+        return;
+    };
+
+    deleteInputFile();
+};
 
 ///////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////PRIVATE////////////////////////////////////
@@ -135,7 +195,7 @@ bool MainWindow::isDeleteToggled() const {
 QString MainWindow::getFileMask() const { return fileMaskInput_->value(); };
 QString MainWindow::getInputFile() const { return fileInput_->value(); };
 QString MainWindow::getOutputFile() const { return saveFileInput_->value(); };
-double MainWindow::getTimerDuration() const {
+int MainWindow::getTimerDuration() const {
     return timerDurationInput_->value();
 };
 QByteArray MainWindow::getXORVariableValue() const {
@@ -189,8 +249,6 @@ bool MainWindow::getFileContent(QByteArray& content_buffer) const {
 };
 void MainWindow::doWork(QByteArray& file_content) const {
     QByteArray key{getXORVariableValue()};
-
-    qInfo() << key;
 
     for (int i{}; i < file_content.size(); ++i) {
         file_content[i] = file_content[i] ^ key[i % key.size()];

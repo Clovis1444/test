@@ -16,7 +16,7 @@ class TimerDurationInput : public QFrame {
         : QFrame{parent},
           layout_{new QVBoxLayout{this}},
           label_{new QLabel{this}},
-          spinBox_{new QDoubleSpinBox{this}} {
+          spinBox_{new QSpinBox{this}} {
         setLayout(layout_);
         layout_->setSpacing(0);
         layout_->setContentsMargins(0, 0, 0, 0);
@@ -31,10 +31,10 @@ class TimerDurationInput : public QFrame {
         spinBox_->setMaximum(8640000);
     }
 
-    double value() const { return spinBox_->value(); }
+    int value() const { return spinBox_->value(); }
 
    private:
     QVBoxLayout* layout_;
     QLabel* label_;
-    QDoubleSpinBox* spinBox_;
+    QSpinBox* spinBox_;
 };
