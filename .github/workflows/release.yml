@@ -83,14 +83,14 @@ jobs:
           wget https://github.com/probonopd/linuxdeployqt/releases/latest/download/linuxdeployqt-continuous-x86_64.AppImage 
           chmod a+x linuxdeployqt-continuous-x86_64.AppImage
           mv linuxdeployqt-continuous-x86_64.AppImage linuxdeployqt.AppImage
-          mkdir ${{matrix.os.artifact}} && mv ${{ env.SOURCE_DIR }}/build/${{env.PROJECT_NAME}} ${{ env.SOURCE_DIR }}/build/resources ${{matrix.os.artifact}}
+          mkdir ${{matrix.os.artifact}} && mv ${{ env.SOURCE_DIR }}/build/${{env.PROJECT_NAME}} ${{matrix.os.artifact}}
           ./linuxdeployqt.AppImage ${{matrix.os.artifact}}/ -always-overwrite
 
       - name: Deploy project(windows)
         if: matrix.os.name == 'windows'
         # Path to windeployqt.exe depends on QT version and Arch
         run: |
-          mkdir ${{matrix.os.artifact}} && mv ${{ env.SOURCE_DIR }}\build\${{env.PROJECT_NAME}}.exe, ${{ env.SOURCE_DIR }}\build\resources ${{matrix.os.artifact}}
+          mkdir ${{matrix.os.artifact}} && mv ${{ env.SOURCE_DIR }}\build\${{env.PROJECT_NAME}}.exe ${{matrix.os.artifact}}
           ${{ runner.temp }}\Qt\6.7.2\msvc2019_64\bin\windeployqt.exe ${{matrix.os.artifact}}\${{env.PROJECT_NAME}}.exe
 
       - name: Zip
