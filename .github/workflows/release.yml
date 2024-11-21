@@ -84,7 +84,7 @@ jobs:
           chmod a+x linuxdeployqt-continuous-x86_64.AppImage
           mv linuxdeployqt-continuous-x86_64.AppImage linuxdeployqt.AppImage
           mkdir ${{matrix.os.artifact}} && mv ${{ env.SOURCE_DIR }}/build/${{env.PROJECT_NAME}} ${{matrix.os.artifact}}
-          ./linuxdeployqt.AppImage ${{matrix.os.artifact}}/ -always-overwrite
+          ./linuxdeployqt.AppImage ${{matrix.os.artifact}}/${{env.PROJECT_NAME}} -always-overwrite
 
       - name: Deploy project(windows)
         if: matrix.os.name == 'windows'
