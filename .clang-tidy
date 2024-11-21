@@ -95,7 +95,8 @@ Checks: >
   -bugprone-narrowing-conversions,
   -bugprone-easily-swappable-parameters,
   -bugprone-implicit-widening-of-multiplication-result,
-  -bugprone-unchecked-optional-access
+  -bugprone-unchecked-optional-access,
+  -readability-redundant-access-specifiers
 
 # Turn all the warnings from the checks above into errors.
 # WarningsAsErrors: "*"

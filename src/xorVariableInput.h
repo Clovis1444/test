@@ -10,11 +10,11 @@
 
 #include "settings.h"
 
-class FileMaskInput : public QFrame {
+class XORVariableInput : public QFrame {
     Q_OBJECT
 
    public:
-    explicit FileMaskInput(QWidget* parent = nullptr)
+    explicit XORVariableInput(QWidget* parent = nullptr)
         : QFrame{parent},
           layout_{new QVBoxLayout{this}},
           label_{new QLabel{this}},
@@ -27,9 +27,9 @@ class FileMaskInput : public QFrame {
         layout_->addWidget(label_);
         layout_->addWidget(lineEdit_);
 
-        label_->setText("Enter file mask:");
+        label_->setText("Enter an 8-byte value for XOR operation:");
         lineEdit_->setFixedSize(Settings::kDefaultLineEditSize);
-        lineEdit_->setPlaceholderText("Example for images: *.png *.jpg *.svg");
+        lineEdit_->setPlaceholderText("Enter an 8-byte value");
 
         // setFrameShape(QFrame::Box);
 

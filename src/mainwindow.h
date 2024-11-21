@@ -10,8 +10,10 @@
 
 #include "fileInput.h"
 #include "fileMaskInput.h"
+#include "overwriteOptionsInput.h"
 #include "saveFileInput.h"
 #include "timerDurationInput.h"
+#include "xorVariableInput.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -26,13 +28,40 @@ class MainWindow : public QMainWindow {
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow() override;
 
+   private slots:
+    void onFileInputButtonPressed();
+    void onFileInputValueChanged();
+    void onSaveFileInputValueChanged();
+
+    void onStartButtonPressed();
+    void onStartTimerButtonPressed();
+
    private:
+    static QString currentTime();
+
+    bool isDeleteToggled() const;
+    QString getFileMask() const;
+    QString getInputFile() const;
+    QString getOutputFile() const;
+    double getTimerDuration() const;
+    QByteArray getXORVariableValue() const;
+    OverwriteOptionsInput::Option overwriteOption() const;
+
+    bool getFileContent(QByteArray &content_buffer) const;
+    void doWork(QByteArray &file_content) const;
+    bool saveFile(const QByteArray &file_content);
+    void deleteInputFile();
+
+    static QString getNewFilePath(const QString &file_name);
+
     Ui::MainWindow *ui_;
 
     QGridLayout *layout_;
 
     FileMaskInput *fileMaskInput_;
+    XORVariableInput *xorVariableInput_;
     TimerDurationInput *timerDurationInput_;
+    OverwriteOptionsInput *overwriteOptionsInput_;
     QCheckBox *deleteCheckBox_;
 
     FileInput *fileInput_;

@@ -26,6 +26,8 @@ set(PROJECT_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/src/fileInput.h
         ${CMAKE_CURRENT_SOURCE_DIR}/src/saveFileInput.h
         ${CMAKE_CURRENT_SOURCE_DIR}/src/timerDurationInput.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/xorVariableInput.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/overwriteOptionsInput.h
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

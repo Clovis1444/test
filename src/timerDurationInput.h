@@ -16,23 +16,25 @@ class TimerDurationInput : public QFrame {
         : QFrame{parent},
           layout_{new QVBoxLayout{this}},
           label_{new QLabel{this}},
-          spin_box_{new QDoubleSpinBox{this}} {
+          spinBox_{new QDoubleSpinBox{this}} {
         setLayout(layout_);
         layout_->setSpacing(0);
         layout_->setContentsMargins(0, 0, 0, 0);
         layout_->setAlignment(Qt::AlignCenter | Qt::AlignHCenter);
 
         layout_->addWidget(label_);
-        layout_->addWidget(spin_box_);
+        layout_->addWidget(spinBox_);
 
         label_->setText("Timer duration(seconds):");
 
         // Note: max limit is 100 days(1 day is 86400 seconds)
-        spin_box_->setMaximum(8640000);
+        spinBox_->setMaximum(8640000);
     }
+
+    double value() const { return spinBox_->value(); }
 
    private:
     QVBoxLayout* layout_;
     QLabel* label_;
-    QDoubleSpinBox* spin_box_;
+    QDoubleSpinBox* spinBox_;
 };

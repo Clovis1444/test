@@ -9,4 +9,6 @@ constexpr QMargins kLayoutMargins{10, 10, 10, 10};
 
 constexpr QSize kDefaultButtonSize{25, 25};
 constexpr QSize kDefaultLineEditSize{300, kDefaultButtonSize.height()};
+
+const QString kDefaultDateTimeFormat{"dd.MM.yy_hh:mm:ss"};
 }  // namespace Settings
