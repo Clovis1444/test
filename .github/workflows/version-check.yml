@@ -1,0 +1,33 @@
+name: Project version check
+on:
+  push:
+    branches: "master"
+
+env:
+  PROJECT_NAME: Program
+
+jobs:
+  version_check:
+    outputs:
+      project_version: ${{steps.get_version.outputs.project_version}}
+      tag_exists: ${{steps.get_version.outputs.exists}}
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get project version
+        id: get_version
+        uses: Clovis1444/GetVersion@main
+        with:
+          file_to_read: CMakeLists.txt
+          line_pattern: project(${{ env.PROJECT_NAME }} VERSION
+          checkout: true
+
+  create_release:
+    needs: [version_check]
+    if: needs.version_check.outputs.tag_exists == 'false'
+    permissions:
+      contents: write
+    uses: ./.github/workflows/release.yml
+    with:
+      release_tag: v${{needs.version_check.outputs.project_version}}
