@@ -29,7 +29,7 @@ class XORVariableInput : public QFrame {
 
         label_->setText("Enter an 8-byte value for XOR operation:");
         lineEdit_->setFixedSize(Settings::kDefaultLineEditSize);
-        lineEdit_->setPlaceholderText("Enter an 8-byte value");
+        lineEdit_->setPlaceholderText("Enter an 8-byte HEX value");
 
         // setFrameShape(QFrame::Box);
 

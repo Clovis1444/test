@@ -202,6 +202,7 @@ QByteArray MainWindow::getXORVariableValue() const {
     QString text{xorVariableInput_->value()};
 
     QByteArray val{text.toUtf8()};
+    val = QByteArray::fromHex(val);
 
     // If less than 8 bytes
     if (val.size() < 8) {
