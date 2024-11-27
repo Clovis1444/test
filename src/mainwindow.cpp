@@ -7,6 +7,7 @@
 #include <qpushbutton.h>
 #include <qspinbox.h>
 #include <qtimer.h>
+#include <qtypes.h>
 
 #include "./ui_mainwindow.h"
 #include "fileMaskInput.h"
@@ -251,7 +252,7 @@ bool MainWindow::getFileContent(QByteArray& content_buffer) const {
 void MainWindow::doWork(QByteArray& file_content) const {
     QByteArray key{getXORVariableValue()};
 
-    for (int i{}; i < file_content.size(); ++i) {
+    for (qsizetype i{}; i < file_content.size(); ++i) {
         file_content[i] = file_content[i] ^ key[i % key.size()];
     }
 };
