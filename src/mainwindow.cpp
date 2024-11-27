@@ -289,8 +289,7 @@ bool MainWindow::saveFile(const QByteArray& file_content) {
     }
 
     // Write content to file
-    QTextStream text_stream{&file};
-    text_stream << file_content;
+    file.write(file_content);
     file.close();
 
     logWidget_->insertPlainText(currentTime());
